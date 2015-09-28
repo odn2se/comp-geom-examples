@@ -1,0 +1,101 @@
+<html>
+
+<head>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="../css/main.css">
+
+
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js" />
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
+
+    <script src="../js/Point.js">
+    </script>
+    <script src="../js/LineSegment.js">
+    </script>
+    <script src="../js/LineSegmentIntersection.js">
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <svg id="segments-container" />
+    </div>
+
+    <script type="text/javascript">
+        var container = d3.select("#segments-container");
+
+        var firstPt = null;
+        var lineSegments = [];
+        container.on("click", function()
+        {
+            var x = d3.event.offsetX;
+            var y = d3.event.offsetY;
+
+            if (firstPt == null)
+            {
+                firstPt = new Point(x, y);
+                console.log("Setting first pt as %o", firstPt);
+            }
+            else
+            {
+                var secondPt = new Point(x, y);
+
+                lineSegments.push(new LineSegment(firstPt, secondPt));
+
+                firstPt = null;
+            }
+
+            drawSegments();
+        });
+
+        function drawSegments()
+        {
+            var svg = d3.select("#segments-container");
+
+            var segmentPts = lineSegments.map(function(d)
+            {
+                return [d.pt1, d.pt2];
+            });
+
+            segmentPts = segmentPts.reduce(function(a, b)
+            {
+                return a.concat(b);
+            }, []);
+            console.log("Segment Pts are %o", segmentPts);
+            var join = svg.selectAll(".point").data(segmentPts);
+            join.enter().append("circle").classed("point", true);
+            join.attr("cx", function(d)
+            {
+                return d.x;
+            }).attr("cy", function(d)
+            {
+                return d.y;
+            }).attr("r", "2");
+
+            join = svg.selectAll("line.segment").data(lineSegments);
+            join.enter().append("line").classed("segment", true);
+            join.attr("x1", function(d)
+            {
+                return d.pt1.x;
+            }).attr("x2", function(d)
+            {
+                return d.pt2.x;
+            }).attr("y1", function(d)
+            {
+                return d.pt1.y;
+            }).attr("y2", function(d)
+            {
+                return d.pt2.y;
+            });
+        }
+    </script>
+</body>
+
+</html>
