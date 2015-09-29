@@ -9,93 +9,152 @@
     <link rel="stylesheet" href="../css/main.css">
 
 
-    <script src="https://code.jquery.com/jquery-2.1.4.min.js" />
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"/>
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
 
-    <script src="../js/Point.js">
+    <script src="../js/Point.js"></script>
+    <script src="../js/LineSegment.js"></script>
+    <script src="../js/BST.js"></script>
+    <script src="../js/LineSegmentIntersection.js"></script>
+    <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+
+
     </script>
-    <script src="../js/LineSegment.js">
-    </script>
-    <script src="../js/LineSegmentIntersection.js">
-    </script>
+    <script type="text/javascript"
+            src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <title>Line Segment Intersection</title>
 </head>
 
 <body>
-    <div class="container">
-        <svg id="segments-container" />
-    </div>
+<div class="container">
+    <h2>Sweep-Line Algorithm for Line Segment Intersection</h2>
 
-    <script type="text/javascript">
-        var container = d3.select("#segments-container");
+    <p>Below is an interactive implementation of the <a
+            href="https://en.wikipedia.org/wiki/Bentley%E2%80%93Ottmann_algorithm">Bentley-Ottmann algorithm</a> using a
+        vertical sweep line (top-down). The running time for the algorithm I've implemented is $O(n\log n+k\log n)$
+        using $O(n)$ space, where $n$ is the number of line segments and $k$ is the size of the output (intersecting
+        segment pairs). Ideally, the algorithm should take $O(n\log n + I\log n)$ time, where $I$ is the number of
+        intersection points. This is improved since many intersection segments can intersect at a single
+        point.</p>
 
-        var firstPt = null;
-        var lineSegments = [];
-        container.on("click", function()
-        {
-            var x = d3.event.offsetX;
-            var y = d3.event.offsetY;
+    <p>Note: I've assumed a general position for the implementation, where line segments intersect in at most one
+        point.</p>
+    <p>TODO: <ul><li>Fix algorithm to take only $O((n+I)\log n)$ time by storing intersection points together in the event queue.</li></ul></p>
+    <svg id="segments-container">
+        <text class="how-to" y="250px" text-anchor="middle" x="50%">Create line segments by clicking anywhere.</text>
+    </svg>
+</div>
 
-            if (firstPt == null)
-            {
-                firstPt = new Point(x, y);
-                console.log("Setting first pt as %o", firstPt);
-            }
-            else
-            {
-                var secondPt = new Point(x, y);
+<script type="text/javascript">
+    var container = d3.select("#segments-container");
 
-                lineSegments.push(new LineSegment(firstPt, secondPt));
+    var id = 1;
+    var firstPt = null;
+    var lineSegments = [];
+    container.on("click", function () {
+        d3.selectAll("text.how-to").remove();
+        var x = d3.event.offsetX;
+        var y = d3.event.offsetY;
 
-                firstPt = null;
-            }
+        if (firstPt == null) {
+            firstPt = new Point(x, y);
+            console.log("Setting first pt as %o", firstPt);
 
-            drawSegments();
+            container.on("mousemove", drawCurrentLine);
+        }
+        else {
+            var secondPt = new Point(x, y);
+
+            lineSegments.push(new LineSegment(firstPt, secondPt));
+            lineSegments[lineSegments.length - 1].name = "S" + (id++);
+
+            firstPt = null;
+            container.on("mousemove", null);
+            d3.selectAll(".cur-segment").remove();
+        }
+
+        container.on("mouseout", function () {
+            d3.selectAll(".cur-segment").remove();
+        });
+        drawSegments();
+    });
+
+    function drawCurrentLine() {
+        var x = d3.event.offsetX;
+        var y = d3.event.offsetY;
+
+        var secondPt = new Point(x, y);
+        var svg = d3.select("#segments-container");
+        var join = svg.selectAll("line.cur-segment").data([new LineSegment(firstPt, secondPt)]);
+        join.enter().append("line").classed("cur-segment", true);
+        join.attr("x1", function (d) {
+            return d.pt1.x;
+        }).attr("x2", function (d) {
+            return d.pt2.x;
+        }).attr("y1", function (d) {
+            return d.pt1.y;
+        }).attr("y2", function (d) {
+            return d.pt2.y;
+        });
+    }
+
+    function drawSegments() {
+        var svg = d3.select("#segments-container");
+
+        join = svg.selectAll("line.segment").data(lineSegments);
+        join.enter().append("line").classed("segment", true);
+        join.attr("x1", function (d) {
+            return d.pt1.x;
+        }).attr("x2", function (d) {
+            return d.pt2.x;
+        }).attr("y1", function (d) {
+            return d.pt1.y;
+        }).attr("y2", function (d) {
+            return d.pt2.y;
         });
 
-        function drawSegments()
-        {
-            var svg = d3.select("#segments-container");
+        var segmentPts = lineSegments.map(function (d) {
+            return [d.pt1, d.pt2];
+        });
 
-            var segmentPts = lineSegments.map(function(d)
-            {
-                return [d.pt1, d.pt2];
-            });
+        segmentPts = segmentPts.reduce(function (a, b) {
+            return a.concat(b);
+        }, []);
+        console.log("Segment Pts are %o", segmentPts);
+        var join = svg.selectAll(".point").data(segmentPts);
+        join.enter().append("circle").classed("point", true);
+        join.attr("cx", function (d) {
+            return d.x;
+        }).attr("cy", function (d) {
+            return d.y;
+        }).attr("r", "3");
 
-            segmentPts = segmentPts.reduce(function(a, b)
-            {
-                return a.concat(b);
-            }, []);
-            console.log("Segment Pts are %o", segmentPts);
-            var join = svg.selectAll(".point").data(segmentPts);
-            join.enter().append("circle").classed("point", true);
-            join.attr("cx", function(d)
-            {
-                return d.x;
-            }).attr("cy", function(d)
-            {
-                return d.y;
-            }).attr("r", "2");
+        var join = svg.selectAll("text.segment-label").data(lineSegments);
+        join.enter().append("text").classed("segment-label", true);
+        join.text(function (d, i) {
+            return d.name;
+        }).attr("x", function (d) {
+            return d.top.x;
+        }).attr("y", function (d) {
+            return d.top.y;
+        });
 
-            join = svg.selectAll("line.segment").data(lineSegments);
-            join.enter().append("line").classed("segment", true);
-            join.attr("x1", function(d)
-            {
-                return d.pt1.x;
-            }).attr("x2", function(d)
-            {
-                return d.pt2.x;
-            }).attr("y1", function(d)
-            {
-                return d.pt1.y;
-            }).attr("y2", function(d)
-            {
-                return d.pt2.y;
-            });
-        }
-    </script>
+
+        var intersections = findIntersections(lineSegments);
+        console.log("Found %d intersections", intersections.length);
+        var join = svg.selectAll("circle.intersection").data(intersections);
+        join.enter().append("circle").classed("intersection", true);
+        join.attr("cx", function (d) {
+            return d.pt.x;
+        }).attr("cy", function (d) {
+            return d.pt.y;
+        }).attr("r", 7);
+    }
+</script>
 </body>
 
 </html>

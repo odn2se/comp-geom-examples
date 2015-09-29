@@ -4,10 +4,38 @@ svg#points-container,
     height: 500px;
     border: 2px solid #000;
 }
+
 line.segment {
     stroke-width: 2;
-    fill: #555;
+    stroke: #555;
 }
+
+line.cur-segment {
+    stroke-width: 1;
+    stroke-dasharray: 5, 5;
+    stroke: #5a5;
+}
+
 circle.point {
     fill: #0f0;
+}
+
+circle.intersection {
+    stroke: #f00;
+    stroke-dasharray: 4, 2;
+    stroke-width: 1px;
+    fill: none;
+}
+
+text.segment-label {
+    pointer-events: none;
+}
+
+text.how-to {
+    font-size: 32pt;
+    color: #4a4a4a;
+    opacity: .50;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: 900;
+    pointer-events: none;
 }
