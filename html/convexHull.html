@@ -1,0 +1,49 @@
+<html>
+<head>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="../css/main.css">
+
+
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"/>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
+
+    <script src="../js/Point.js"></script>
+    <script src="../js/GrahamScan.js"></script>
+    <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+
+
+
+    </script>
+    <script type="text/javascript"
+            src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <title>Convex Hull - Graham scan</title>
+</head>
+<body>
+<div class="container">
+    <h2>Convex Hull</h2>
+
+    <p>Below is an interactive implementation of Graham Scan algorithm. Psuedo code for the algorithm is as follows:
+        <pre class="pseudocode">
+        Choose starting point s as the left-most point in the set. If there are multiple, choose the top most.
+        Sort the remaining points by their angle from the vertical with , resulting in $p_1$,...,$p_n-1$.
+        Put s and p_1 into a list L_hull
+        for i from 2 to n-1
+            add p_i to L_hull
+            while L_hull has more than two points and the final three do not form a right turn (clockwise)
+                remove the second to last point from L_hull.
+    </pre>
+    </p>
+
+    <svg id="points-container"/>
+</div>
+<script src="../js/PointContainer.js"></script>
+</body>
+</html>
