@@ -15,7 +15,7 @@ function findIntersections(lineSegments) {
         var btPt = comparePts(segment.pt1, segment.pt2) < 0 ? segment.pt2 : segment.pt1;
         eventQueue.insert(new SegmentStartEvent(topPt, segment));
         eventQueue.insert(new SegmentEndEvent(btPt, segment));
-        console.log("Inserted segment %o", segment)
+        console.log("Inserted segment %o", segment);
     });
 
     console.log("EventQueue is %o", eventQueue);
@@ -32,6 +32,7 @@ function findIntersections(lineSegments) {
     return intersections;
 
     function handleEventPoint(p) {
+        var nextNeighbor, prevNeighbor;
         console.debug("Handling event point %o", p);
         if (p.type === 'SegmentStart') {
             //if (statusStructure.compare == null)
@@ -40,8 +41,8 @@ function findIntersections(lineSegments) {
 
             console.log("Size of status is %d", statusStructure.size());
 
-            var nextNeighbor = statusStructure.findNext(p.segment);
-            var prevNeighbor = statusStructure.findPrev(p.segment);
+            nextNeighbor = statusStructure.findNext(p.segment);
+            prevNeighbor = statusStructure.findPrev(p.segment);
 
             // Find the intersections between this new segment and the segments to the left and right
             findNewEventPoint(p.segment, nextNeighbor, p.pt);
@@ -55,11 +56,11 @@ function findIntersections(lineSegments) {
             });
         } else if (p.type === 'SegmentEnd') {
             console.debug("Removing %o from status structure", p);
-            var nextNeighbor = statusStructure.findNext(p.segment);
-            var prevNeighbor = statusStructure.findPrev(p.segment);
+            nextNeighbor = statusStructure.findNext(p.segment);
+            prevNeighbor = statusStructure.findPrev(p.segment);
             statusStructure.delete(p.segment);
         } else if (p.type === 'SegmentIntersection') {
-            intersections.push(p)
+            intersections.push(p);
             console.debug("Intersection between %o and %o", p.s1, p.s2);
             statusStructure.delete(p.s1);
             statusStructure.delete(p.s2);
@@ -86,7 +87,7 @@ function findIntersections(lineSegments) {
     }
 
     function findNewEventPoint(sl, sr, pt) {
-        if (sl == null || sr == null)
+        if (sl === null || sr === null)
             return;
         var interX = (sr.intercept - sl.intercept) / (sl.slope - sr.slope);
         var interY = sl.y(interX);
@@ -134,7 +135,7 @@ function compareSegmentsAtPt(p) {
                     return -1;
             }
         }
-    }
+    };
 }
 
 function comparePts(pt1, pt2) {

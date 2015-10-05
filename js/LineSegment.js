@@ -10,19 +10,19 @@ function LineSegment(pt1, pt2) {
         this.top = pt2;
         this.bottom = pt1;
     }
-    this.name = "S"
+    this.name = "S";
 }
 
 LineSegment.prototype.y = function (x) {
     return this.slope * x + this.intercept;
-}
+};
 
 LineSegment.prototype.x = function (pt) {
-    if (this.slope == 0)
+    if (this.slope === 0)
         return Math.max(this.top.x, Math.min(pt.x, this.bottom.x));
     return (pt.y - this.intercept) / this.slope;
-}
+};
 
 LineSegment.prototype.containsY = function (y) {
     return y >= this.top.y && y <= this.bottom.y;
-}
+};

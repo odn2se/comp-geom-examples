@@ -1,15 +1,19 @@
 /*
  * Compute the convex hull of an array of points using the Graham Scan procedure
  */
+var convexHull = grahamScan;
+
 function grahamScan(points) {
     var hull = [];
 
     var minX = null;
-    points.forEach(function(pt) {
-        if (minX == null || minX.x > pt.x || (minX.x == pt.x && minX.y > pt.y)) minX = pt;
+    points = points.slice();
+
+    points.forEach(function (pt) {
+        if (minX === null || minX.x > pt.x || (minX.x == pt.x && minX.y > pt.y)) minX = pt;
     });
 
-    points.sort(function(pt1, pt2) {
+    points.sort(function (pt1, pt2) {
         if (pt1.x == minX.x && pt1.y == minX.y)
             return -1;
         if (pt2.x == minX.x && pt2.y == minX.y)
@@ -25,20 +29,20 @@ function grahamScan(points) {
         else return 0;
     });
 
-	console.log("MinX is ", minX);
+    console.log("MinX is ", minX);
     hull.push(minX);
     hull.push(points[1]);
-	console.log("Hull beginning is ", hull);
+    console.log("Hull beginning is ", hull);
 
-	// TODO: Handle colinear points (particularly at the start of the method)
+    // TODO: Handle colinear points (particularly at the start of the method)
     for (var i = 2; i < points.length; i++) {
         while (cw(hull[hull.length - 2], hull[hull.length - 1], points[i]) <= 0) {
             hull.pop();
         }
-		hull.push(points[i]);
+        hull.push(points[i]);
     }
 
-	return hull;
+    return hull;
 }
 
 /*

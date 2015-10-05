@@ -14,14 +14,14 @@ function Node(val, parent) {
     this.right = null;
 }
 
-printVisitor = function (d) {
+function printVisitor(d) {
     console.log("%o", d);
 }
 
 
 BST.prototype.inOrder = function (visitor) {
     function inOrderRecurse(node, visitor) {
-        if (node == null)
+        if (node === null)
             return;
 
         inOrderRecurse(node.left, visitor);
@@ -41,30 +41,30 @@ BST.prototype.size = function () {
 };
 
 BST.prototype.isEmpty = function () {
-    return this.size() == 0;
-}
+    return this.size() === 0;
+};
 
 BST.prototype.insert = function (d) {
     function insertRecurse(bst, node, d) {
         var comp = bst.compare(node.value, d);
 
-        if (comp == 0) {
+        if (comp === 0) {
             //console.debug("BST already contains value %o", d);
             return;
         } else if (comp > 0) {
-            if (node.left == null)
+            if (node.left === null)
                 node.left = new Node(d, node);
             else
                 insertRecurse(bst, node.left, d);
         } else {
-            if (node.right == null)
+            if (node.right === null)
                 node.right = new Node(d, node);
             else
                 insertRecurse(bst, node.right, d);
         }
     }
 
-    if (this.root == null) {
+    if (this.root === null) {
         this.root = new Node(d, null);
     } else {
         insertRecurse(this, this.root, d);
@@ -74,12 +74,12 @@ BST.prototype.insert = function (d) {
 };
 
 function searchRecurse(bst, node, d) {
-    if (node == null)
+    if (node === null)
         return null;
 
     var comp = bst.compare(node.value, d);
 
-    if (comp == 0)
+    if (comp === 0)
         return node;
     else if (comp < 0)
         return searchRecurse(bst, node.right, d);
@@ -89,31 +89,31 @@ function searchRecurse(bst, node, d) {
 }
 
 BST.prototype.contains = function (d) {
-    return searchRecurse(this, this.root, d) != null;
+    return searchRecurse(this, this.root, d) !== null;
 };
 
 BST.prototype.findMin = function () {
-    if (this.root == null)
+    if (this.root === null)
         return null;
 
     return findMin(this.root).value;
 };
 
 BST.prototype.findMax = function () {
-    if (this.root == null)
+    if (this.root === null)
         return null;
 
     return findMax(this.root).value;
 };
 
 function findMin(node) {
-    if (node.left == null)
+    if (node.left === null)
         return node;
     return findMin(node.left);
 }
 
 function findMax(node) {
-    if (node.right == null)
+    if (node.right === null)
         return node;
     return findMax(node.right);
 }
@@ -122,31 +122,31 @@ BST.prototype.delete = function (d) {
     function replaceNode(bst, node, newNode) {
        // console.debug("Replacing node %o with %o", node, newNode);
 
-        if (node.parent == null)
+        if (node.parent === null)
             bst.root = newNode;
-        else if (node.parent.right == node)
+        else if (node.parent.right === node)
             node.parent.right = newNode;
         else
             node.parent.left = newNode;
 
-        if (newNode != null)
+        if (newNode !== null)
             newNode.parent = node.parent;
 
     }
 
     function deleteRecurse(bst, node, d) {
-        if (node == null) {
+        if (node === null) {
            // console.debug("Value %o not found", d);
             return false;
         }
 
         var comp = bst.compare(node.value, d);
-        if (comp == 0) {
-            if (node.left != null && node.right != null) {
+        if (comp === 0) {
+            if (node.left !== null && node.right !== null) {
                 var leftMostRightNode = findMin(node.right);
                 node.value = leftMostRightNode.value;
-                deleteRecurse(bst, node.right, leftMostRightNode.value)
-            } else if (node.left == null) {
+                deleteRecurse(bst, node.right, leftMostRightNode.value);
+            } else if (node.left === null) {
                 replaceNode(bst, node, node.right);
             } else {
                 replaceNode(bst, node, node.left);
@@ -165,26 +165,26 @@ BST.prototype.delete = function (d) {
 BST.prototype.findPrev = function (d) {
     var node = searchRecurse(this, this.root, d);
 
-    if (node == null)
+    if (node === null)
         return null;
 
     function findLeftParent(node) {
-        if (node.parent == null)
+        if (node.parent === null)
             return null;
 
-        if (node.parent.right == node)
+        if (node.parent.right === node)
             return node.parent;
         else
             return findLeftParent(node.parent);
     }
 
-    if (node.left != null) {
+    if (node.left !== null) {
         // Find the least element in the right node
         return findMax(node.left).value;
     } else {
         // Look up to the parents until we find a right parent
         var leftParent = findLeftParent(node);
-        if (leftParent == null) {
+        if (leftParent === null) {
            // console.debug("Node %o is the min in the BST", d);
             return null;
         } else
@@ -195,28 +195,28 @@ BST.prototype.findPrev = function (d) {
 BST.prototype.findNext = function (d) {
     var node = searchRecurse(this, this.root, d);
 
-    if (node == null) {
+    if (node === null) {
       //  console.debug("%o is not in the BST", d);
         return null;
     }
 
     function findRightParent(node) {
-        if (node.parent == null)
+        if (node.parent === null)
             return null;
 
-        if (node.parent.left == node)
+        if (node.parent.left === node)
             return node.parent;
         else
             return findRightParent(node.parent);
     }
 
-    if (node.right != null) {
+    if (node.right !== null) {
         // Find the least element in the right node
         return findMin(node.right).value;
     } else {
         // Look up to the parents until we find a right parent
         var rightParent = findRightParent(node);
-        if (rightParent == null) {
+        if (rightParent === null) {
            // console.debug("Node %o is the max in the BST", d);
             return null;
         } else
