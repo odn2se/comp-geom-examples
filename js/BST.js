@@ -62,12 +62,14 @@ BST.prototype.isEmpty = function () {
     return this.size() === 0;
 };
 
-BST.prototype.insert = function (d) {
+BST.prototype.insert = function (d, replaceFn) {
     function insertRecurse(bst, node, d) {
         var comp = bst.compare(node.value, d);
 
         if (comp === 0) {
             //console.debug("BST already contains value %o", d);
+            if (typeof replaceFn !== 'undefined')
+                node.value = replaceFn(node.value, d);
             return;
         } else if (comp > 0) {
             if (node.left === null)
@@ -101,15 +103,22 @@ function searchRecurse(bst, node, d) {
 
     if (comp === 0)
         return node;
-    else if (comp < 0)
+    else if (comp < 0) {
+        if (node.right === null)
+            return node;
         return searchRecurse(bst, node.right, d);
-    else if (comp > 0)
+    }
+    else if (comp > 0) {
+        if (node.left === null)
+            return node;
         return searchRecurse(bst, node.left, d);
+    }
 
 }
 
 BST.prototype.contains = function (d) {
-    return searchRecurse(this, this.root, d) !== null;
+    var searchResult = searchRecurse(this, this.root, d).value;
+    return searchResult !== null && this.compare(d, searchResult) === 0;
 };
 
 BST.prototype.findMin = function () {
@@ -183,11 +192,6 @@ BST.prototype.delete = function (d) {
 };
 
 BST.prototype.findPrev = function (d) {
-    var node = searchRecurse(this, this.root, d);
-
-    if (node === null)
-        return null;
-
     function findLeftParent(node) {
         if (node.parent === null)
             return null;
@@ -197,6 +201,15 @@ BST.prototype.findPrev = function (d) {
         else
             return findLeftParent(node.parent);
     }
+
+    if (this.root === null)
+        return null;
+
+    var node = searchRecurse(this, this.root, d);
+
+    var c = this.compare(node.value, d);
+    if (c < 0)
+        return node.value;
 
     if (node.left !== null) {
         // Find the least element in the right node
@@ -213,13 +226,6 @@ BST.prototype.findPrev = function (d) {
 };
 
 BST.prototype.findNext = function (d) {
-    var node = searchRecurse(this, this.root, d);
-
-    if (node === null) {
-        //  console.debug("%o is not in the BST", d);
-        return null;
-    }
-
     function findRightParent(node) {
         if (node.parent === null)
             return null;
@@ -229,6 +235,14 @@ BST.prototype.findNext = function (d) {
         else
             return findRightParent(node.parent);
     }
+
+    if (this.root === null)
+        return null;
+
+    var node = searchRecurse(this, this.root, d);
+    var c = this.compare(node.value, d);
+    if (c > 0)
+        return node.value;
 
     if (node.right !== null) {
         // Find the least element in the right node
@@ -244,6 +258,6 @@ BST.prototype.findNext = function (d) {
     }
 };
 
-BST.prototype.toString = function() {
+BST.prototype.toString = function () {
     return "BST";
 };

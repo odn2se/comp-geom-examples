@@ -37,18 +37,20 @@ function findIntersections(lineSegments) {
         if (p.type === 'SegmentStart') {
             //if (statusStructure.compare == null)
             statusStructure.compare = compareSegmentsAtPt(p.pt);
-            statusStructure.insert(p.segment);
+            p.segments.forEach(function (seg) {
+                statusStructure.insert(seg);
+            });
 
             console.log("Size of status is %d", statusStructure.size());
 
-            nextNeighbor = statusStructure.findNext(p.segment);
-            prevNeighbor = statusStructure.findPrev(p.segment);
+            nextNeighbor = statusStructure.findNext(p.segments[0]);
+            prevNeighbor = statusStructure.findPrev(p.segments[0]);
 
             // Find the intersections between this new segment and the segments to the left and right
-            findNewEventPoint(p.segment, nextNeighbor, p.pt);
-            findNewEventPoint(prevNeighbor, p.segment, p.pt);
+            findNewEventPoint(p.segment[0], nextNeighbor, p.pt);
+            findNewEventPoint(prevNeighbor, p.segment[0], p.pt);
 
-            console.debug("Inserted %o, next neighbor is now %o, prev neighbor is now %o", p.segment, nextNeighbor, prevNeighbor);
+            console.debug("Inserted %o, next neighbor is now %o, prev neighbor is now %o", p.segment[0], nextNeighbor, prevNeighbor);
 
             console.log("X vals at pt from BST: %o", statusStructure);
             statusStructure.inOrder(function (seg) {
@@ -103,6 +105,7 @@ function findIntersections(lineSegments) {
         }
     }
 }
+
 function compareSegmentsAtPt(p) {
     return function (s1, s2) {
         if (s1 == s2)
@@ -162,8 +165,12 @@ function compareEvents(a, b) {
  */
 function SegmentStartEvent(pt, segment) {
     this.pt = pt;
-    this.segment = segment;
+    this.segments = [segment];
     this.type = "SegmentStart";
+
+    this.toString = function () {
+        return "SegmentStart " + this.segments;
+    };
 }
 
 function SegmentIntersection(pt, s1, s2) {
@@ -171,10 +178,17 @@ function SegmentIntersection(pt, s1, s2) {
     this.type = "SegmentIntersection";
     this.s1 = s1;
     this.s2 = s2;
+    this.toString = function () {
+        return "SegmentIntersection " + this.s1 + " and " + this.s2;
+    };
 }
 
 function SegmentEndEvent(pt, segment) {
     this.pt = pt;
     this.type = "SegmentEnd";
     this.segment = segment;
+
+    this.toString = function () {
+        return "SegmentEnd " + this.segment;
+    };
 }

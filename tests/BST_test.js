@@ -35,3 +35,27 @@ test("delete", function () {
     equal(bst.size(), 2);
     ok(!bst.contains(5));
 });
+
+
+test("pre order", function () {
+    var bst = new BST(d3.ascending);
+
+    bst.insert(2).insert(3).insert(1).insert(1.5);
+    var str = "";
+    bst.preOrder(function (d) {
+        str += d + ",";
+    });
+
+    equal(str, "2,1,1.5,3,", "Pre order works");
+});
+
+test("findPrev, findNext", function () {
+    var bst = new BST(d3.ascending);
+
+    bst.insert(2).insert(3).insert(1).insert(40).insert(4);
+
+    equal(bst.findPrev(1.5), 1, "Previous of non-existant value");
+    equal(bst.findPrev(1), null, "Previous of first value");
+    equal(bst.findPrev(0.75), null, "Previous of non-existant first value");
+    equal(bst.findNext(40.75), null, "Previous of non-existant first value");
+});
