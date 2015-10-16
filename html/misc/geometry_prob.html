@@ -1,0 +1,53 @@
+<html>
+<head>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+
+
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"/>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+
+    <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+
+
+
+
+
+
+    </script>
+    <script type="text/javascript"
+            src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <title>Do two objects move towards eachother?</title>
+</head>
+<body>
+<div class="container">
+    <p><br/><br/><br/><br/>
+        Let $q$ be the position of object 1, and $r$ be the position of object 2 and $v_q$, $v_r$ be their respective
+        velocities. <br/>
+        Reframe the problem such that $p = q - r$, $v = v_q - v_r$. Now it's a one object problem w.r.t the origin.
+        <br/> <br/>
+
+        Distance from the origin is <br/>
+        $ d = \lVert p + v t \rVert = \sqrt{\left( p_x + v_x t \right)^2 + \left(p_y + v_y t\right)^2}$
+        <br/>
+        $ d = \sqrt{t^2\left(v_x^2 + v_y^2\right) + t(2p_x v_x + 2p_y v_y) + (p_x^2 + p_y^2)}$
+        <br/>
+        $ \frac{dd}{dt} = \frac{t(v_x^2+v_y^2) + (p_x v_x+p_y v_y)}{ \sqrt{t^2\left(v_x^2 + v_y^2\right) + t(2p_x v_x + 2p_y
+        v_y) + (p_x^2 + p_y^2)}}$
+
+        <br/>
+        <br/>
+        $\frac{dd}{dt}$ minimizes at
+        $t = \frac{-(p_x v_x+p_y v_y)}{v_x^2+v_y^2}$
+    </p>
+</div>
+<script src="../../js/PointContainer.js"></script>
+</body>
+</html>

@@ -14,6 +14,11 @@ function Node(val, parent) {
     this.right = null;
 }
 
+Node.prototype.toString = function () {
+    return "[Node " + this.value + "]";
+};
+
+
 function printVisitor(d) {
     console.log("%o", d);
 }
@@ -64,6 +69,8 @@ BST.prototype.insert = function (d) {
         }
     }
 
+    var size = this.size();
+    console.debug("Adding %o into BST", d.toString(), size);
     if (this.root === null) {
         this.root = new Node(d, null);
     } else {
@@ -120,7 +127,7 @@ function findMax(node) {
 
 BST.prototype.delete = function (d) {
     function replaceNode(bst, node, newNode) {
-       // console.debug("Replacing node %o with %o", node, newNode);
+        // console.debug("Replacing node %o with %o", node, newNode);
 
         if (node.parent === null)
             bst.root = newNode;
@@ -136,7 +143,7 @@ BST.prototype.delete = function (d) {
 
     function deleteRecurse(bst, node, d) {
         if (node === null) {
-           // console.debug("Value %o not found", d);
+            // console.debug("Value %o not found", d);
             return false;
         }
 
@@ -185,7 +192,7 @@ BST.prototype.findPrev = function (d) {
         // Look up to the parents until we find a right parent
         var leftParent = findLeftParent(node);
         if (leftParent === null) {
-           // console.debug("Node %o is the min in the BST", d);
+            // console.debug("Node %o is the min in the BST", d);
             return null;
         } else
             return leftParent.value;
@@ -196,7 +203,7 @@ BST.prototype.findNext = function (d) {
     var node = searchRecurse(this, this.root, d);
 
     if (node === null) {
-      //  console.debug("%o is not in the BST", d);
+        //  console.debug("%o is not in the BST", d);
         return null;
     }
 
@@ -217,9 +224,13 @@ BST.prototype.findNext = function (d) {
         // Look up to the parents until we find a right parent
         var rightParent = findRightParent(node);
         if (rightParent === null) {
-           // console.debug("Node %o is the max in the BST", d);
+            // console.debug("Node %o is the max in the BST", d);
             return null;
         } else
             return rightParent.value;
     }
+};
+
+BST.prototype.toString = function() {
+    return "BST";
 };
