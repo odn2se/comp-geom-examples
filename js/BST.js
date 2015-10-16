@@ -37,6 +37,19 @@ BST.prototype.inOrder = function (visitor) {
     inOrderRecurse(this.root, visitor);
 };
 
+BST.prototype.preOrder = function (visitor) {
+    function preOrderRecurse(node, visitor) {
+        if (node === null)
+            return;
+
+        visitor(node.value);
+        preOrderRecurse(node.left, visitor);
+        preOrderRecurse(node.right, visitor);
+    }
+
+    preOrderRecurse(this.root, visitor);
+};
+
 BST.prototype.size = function () {
     var size = 0;
     this.inOrder(function (d) {
