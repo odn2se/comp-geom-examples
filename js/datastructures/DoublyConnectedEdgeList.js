@@ -223,7 +223,7 @@ DoublyConnectedEdgeList.prototype.merge = function (otherDCE) {
             if (intersection !== null)
                 eventQueue.insert(new SegmentIntersection(intersection));
         } else {
-            sl =
+            //sl =
         }
 
         eventQueue.delete(event);

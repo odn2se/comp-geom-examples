@@ -117,6 +117,8 @@ function searchRecurse(bst, node, d) {
 }
 
 BST.prototype.contains = function (d) {
+    if (d.root === null)
+        return false;
     var searchResult = searchRecurse(this, this.root, d).value;
     return searchResult !== null && this.compare(d, searchResult) === 0;
 };
