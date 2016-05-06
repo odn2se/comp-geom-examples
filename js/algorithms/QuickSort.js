@@ -3,6 +3,8 @@
 function sort(arr, comparator) {
     console.log("Logging array", arr);
     qsRecurse(arr, 0, arr.length);
+
+    return arr;
 }
 
 // right exclusive
