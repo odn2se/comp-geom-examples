@@ -13,7 +13,7 @@ function qsRecurse(arr, left, right) {
     if (right - left <= 1)
         return;
 
-    console.log("Sorting ", arr, left, right);
+    //console.log("Sorting ", arr, left, right);
     var pivot = arr[left];
 
     var pivotLocation = left + 1;

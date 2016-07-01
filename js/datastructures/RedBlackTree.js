@@ -18,6 +18,25 @@ function Node(val, parent, color) {
     this.color = color;
 }
 
+RBT.prototype.height = function() {
+    if(this.root === null)
+        return 0;
+    else
+        return this.root.height();
+};
+
+Node.prototype.height = function() {
+    var leftHeight = 0;
+    var rightHeight = 0;
+
+    if(this.left !== null)
+        leftHeight = this.left.height();
+    if(this.right !== null)
+        rightHeight = this.right.height();
+
+    return 1 + Math.max(leftHeight, rightHeight);
+};
+
 //  A helper method to find the uncle of a node
 Node.prototype.uncle = function () {
     if (this.parent === null || this.parent.parent === null)
@@ -75,7 +94,12 @@ RBT.prototype.insert = function (d, replaceFn) {
         return this;
     } else if (justInserted.parent.color === RED && justInserted.uncle() === RED) {
         // Both the parent and uncle are RED
-
+        // repaint parent and uncle
+        justInserted.parent.color = BLACK;
+        justInserted.uncle().color = BLACK;
+        var g = justInserted.parent.parent;
+        g.color = RED;
+        insertCase1(g);
     }
 
     return this;

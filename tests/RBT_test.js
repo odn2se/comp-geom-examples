@@ -17,4 +17,5 @@ test("insert rebalance", function () {
     ok(rbt.insert(4));
 
     ok(rbt.contains(4));
+    equal(rbt.height(), 2);
 });
