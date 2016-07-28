@@ -28,6 +28,7 @@ module.exports = function(grunt) {
       files: ['Gruntfile.js', 'js/**/*.js', 'tests/**/*.js'],
       options: {
         // options here to override JSHint defaults
+        ignores: ['tests/lib/*.js'],
         globals: {
           jQuery: true,
           console: true,
