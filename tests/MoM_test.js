@@ -33,7 +33,7 @@ test("simple test unordered", function () {
 });
 
 
-var largeTestSize = 4000000;
+var largeTestSize = 100000;
 test("large test (randomized)", function () {
     var list = [];
 
@@ -79,10 +79,10 @@ test("Variable test size", function () {
         equal(result, 5000);
     };
 
-    var maxTestSize = 4000000;
+    var maxTestSize = 20000000;
+    //var maxTestSize = 2000;
     var results = [];
     for (var k = 1; k <= maxTestSize; k *= 2) {
-        console.log(k);
         var t0 = performance.now();
         testKSize(k);
         var t1 = performance.now();
