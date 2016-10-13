@@ -79,7 +79,7 @@ test("Variable test size", function () {
         equal(result, 5000);
     };
 
-    var maxTestSize = 20000000;
+    var maxTestSize = 200000;
     //var maxTestSize = 2000;
     var results = [];
     for (var k = 1; k <= maxTestSize; k *= 2) {

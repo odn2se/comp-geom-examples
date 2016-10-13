@@ -84,6 +84,7 @@ function medianOf2(chunk) {
     return (a + b) / 2;
 }
 
+// Median of 3 in two comparisons (sortation)
 function medianOf3(chunk) {
     if (chunk.length < 3)
         return medianOf2(chunk);
@@ -123,6 +124,7 @@ function srt(l, a, b) {
     }
 }
 
+// Median of 4 in 5 comparisons
 function medianOf4(c) {
     if (c.length < 4)
         return medianOf3(c);
@@ -138,6 +140,7 @@ function medianOf4(c) {
     return (c[1] + c[2]) / 2;
 }
 
+// Median of 5 in 6 comparisons
 function medianOf5(chunk) {
     if (chunk.length < 5)
         return medianOf4(chunk);
