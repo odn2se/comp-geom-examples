@@ -6,10 +6,10 @@
 
     <title>QUnit Test Runner</title>
 
-    <link rel='stylesheet' href='http://code.jquery.com/qunit/qunit-1.19.0.css'>
+    <link rel='stylesheet' href='lib/qunit-1.19.0.css'>
 
     <!-- add any external libraries your code needs -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.js"></script>
+    <script src="lib/d3.js"></script>
 
     <!-- add any JS files under test (or put them in different .html files) -->
     <script src='../js/Polyfill.js'></script>
@@ -20,13 +20,14 @@
     <script src='../js/Edge.js'></script>
     <script src='../js/datastructures/DoublyConnectedEdgeList.js'></script>
     <script src='../js/datastructures/RedBlackTree.js'></script>
+    <script src='../js/datastructures/SuffixTree.js'></script>
     <script src='../js/algorithms/QuickSort.js'></script>
     <script src='../js/algorithms/MergeSort.js'></script>
     <script src='../js/algorithms/HeapSort.js'></script>
-
+    <script src='../js/algorithms/MedianOfMedians.js'></script>
 
     <!-- QUnit -->
-    <script src='http://code.jquery.com/qunit/qunit-1.19.0.js'></script>
+    <script src='lib/qunit-1.19.0.js'></script>
 
     <!-- test fixtures -->
     <script src='BST_test.js'></script>
@@ -36,6 +37,8 @@
     <script src='QuickSort_test.js'></script>
     <script src='MergeSort_test.js'></script>
     <script src='HeapSort_test.js'></script>
+    <script src='MoM_test.js'></script>
+    <script src='SuffixTree_test.js'></script>
 </head>
 <body>
 <div id="qunit"></div>
