@@ -35,6 +35,15 @@ SuffixTree.prototype.findPattern = function (str) {
         return Array.from(res.node.accumulateTerminated());
 };
 
+SuffixTree.prototype.longestSubstr = function (str) {
+    var res = this.root.findDeepest(str);
+
+    return {
+        matchedCharacters: (str.length - res.leftover),
+        arr: Array.from(res.node.getTerminated())
+    };
+};
+
 SuffixTree.prototype.insert = function (str) {
     var helper = function insertHelper(str, fullStr, root) {
         var deepest = root.findDeepest(str);
@@ -79,7 +88,7 @@ Node.prototype.findDeepest = function (str) {
     return this.children[char].findDeepest(rest);
 };
 
-Node.prototype.accumulateTerminated = function() {
+Node.prototype.accumulateTerminated = function () {
     var s = new Set(this.getTerminated());
 
     for (var key in this.children) {
